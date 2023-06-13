@@ -69,6 +69,28 @@ Describe your performance budget using a [`budget.json`](https://web.dev/use-lig
 ## Recipes
 
 <details>
+  <summary>Comment summary on pull request.</summary><br>
+
+```yml
+name: Lighthouse
+on: push
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Lighthouse on urls and validate with lighthouserc
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          urls: 'https://exterkamp.codes/'
+          configPath: './lighthouserc.json'
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+```
+</details>
+
+<details>
  <summary>Run Lighthouse and validate against Lighthouse CI assertions.</summary><br>
 
 Create `.github/workflows/main.yml` with the list of URLs to audit

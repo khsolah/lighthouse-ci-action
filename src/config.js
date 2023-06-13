@@ -77,6 +77,7 @@ exports.getInput = function getInputArgs() {
     basicAuthUsername: core.getInput('basicAuthUsername') || 'lighthouse',
     basicAuthPassword: core.getInput('basicAuthPassword'),
     artifactName: core.getInput('artifactName'),
+    githubToken: core.getInput('githubToken'),
   }
 }
 

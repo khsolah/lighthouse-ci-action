@@ -7,6 +7,7 @@ const { getInput, hasAssertConfig } = require('./config')
 const { uploadArtifacts } = require('./utils/artifacts')
 const { setAnnotations } = require('./utils/annotations')
 const { setOutput } = require('./utils/output')
+const { createComment } = require('./utils/comment')
 
 /**
  * Audit urls with Lighthouse CI in 3 stages:
@@ -101,6 +102,19 @@ async function main() {
   if (uploadStatus !== 0) throw new Error(`LHCI 'upload' failed to upload to fylesystem.`)
 
   core.endGroup() // Uploading
+
+  /******************************* 4. Writing COMMENT ************************************/
+  core.startGroup(`Writing comment`)
+
+  if (input.githubToken) {
+    const createCommentStatus = await createComment({ githubToken: input.githubToken, resultsPath });
+    if (createCommentStatus !== 0) throw new Error(`createComment failed to write comments on pull request`)
+    core.debug('Done writing comments on pull request')
+  } else {
+    core.warning('Github token not set! Skip writing comments.')
+  }
+
+  core.endGroup()
 
   await setOutput(resultsPath)
   await setAnnotations(resultsPath) // set failing error/warning annotations
